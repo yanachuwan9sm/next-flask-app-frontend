@@ -1,0 +1,6 @@
+/*
+| SWCからbabelを使ったコンパイルに変更
+*/
+{
+  "presets": ["next/babel"]
+}
