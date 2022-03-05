@@ -1,8 +1,10 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import backImg from "../public/images/backimage.png";
+import UploadButton from "../components/UploadButton";
 
 const Home: NextPage = () => {
   return (
@@ -13,7 +15,18 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container mx="auto" minWidth="700px" bgColor="#696969">
+      <Container
+        mx="auto"
+        minWidth="500px"
+        maxWidth="700px"
+        bgRepeat="no-repeat"
+      >
+        <Image src="/backimage.png" layout="fill" objectFit="cover" />
+
+        <Heading as="h1" size="2xl" isTruncated>
+          🔥Remote Worker Check🔥
+        </Heading>
+
         <Container py={2}>
           <Box
             minHeight="100vh"
@@ -24,11 +37,12 @@ const Home: NextPage = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <h1 className={styles.title}>🔥Remote Worker Check🔥</h1>
-
             <p className={styles.description}>
               あなたのリモートオフィスからリモートワーカー度を計測します
             </p>
+
+            <UploadButton />
+
             <code className={styles.code}>
               const Remote Worker Level = objectRecognition(remoteOffice);
             </code>
