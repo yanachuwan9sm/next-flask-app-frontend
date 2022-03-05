@@ -48,7 +48,7 @@ const UploadButton = () => {
   //
   // 選択した画像のプレビューを表示するコールバック関数
   //
-  const handlePreview = (files: any) => {
+  const handlePreview = (files: File[]) => {
     if (files === null) {
       return;
     }
@@ -84,7 +84,7 @@ const UploadButton = () => {
             {...getRootProps()}
           >
             {/* この中の要素をタップすると画像を選択する */}
-            <Input {...getInputProps()} />
+            <input {...getInputProps()} />
             {myFiles.length === 0 ? (
               <>
                 <p>画像を選択またはドラッグ＆ドロップできます</p>
