@@ -53,12 +53,12 @@ const UploadButton = () => {
       return;
     }
     const file = files[0];
-    if (file === null) {
-      return;
-    }
+
     let reader = new FileReader();
     // File型のファイルを読込、Base64形式に変換する
-    reader.readAsDataURL(file);
+    if (file) {
+      reader.readAsDataURL(file);
+    }
     reader.onload = () => {
       setPreviewImg(reader.result as string);
     };

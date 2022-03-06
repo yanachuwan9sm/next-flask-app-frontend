@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         <Image src="/backimage.png" layout="fill" objectFit="cover" />
 
         <Heading as="h1" size="2xl" isTruncated>
-          🔥Remote Worker Check🔥
+          🔥Remote Worker Checker🔥
         </Heading>
 
         <Container py={2}>
