@@ -1,4 +1,4 @@
-import React, { Dispatch, useRef } from "react";
+import React, { Dispatch, useCallback, useRef } from "react";
 
 import {
   Modal,
@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useImageCrop } from "./hooks/useImageCrop";
-import ReactCrop, { Crop } from "react-image-crop";
+import ReactCrop, { centerCrop, Crop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 type PROPS = {
@@ -37,15 +37,18 @@ const CropperModal: React.FC<PROPS> = ({
 }) => {
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  const [crop, setCrop, setImage] = useImageCrop(
-    imgRef.current,
+  const [crop, setCrop, previewImg] = useImageCrop(
+    imgRef,
     setImageInput,
     setResult
   );
 
-  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    imgRef.current = e.currentTarget;
-  };
+  const onImageLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      imgRef.current = e.currentTarget;
+    },
+    []
+  );
 
   // モーダルを閉じる際に実行するコールバック関数
   const closeHandle = () => {
@@ -60,7 +63,12 @@ const CropperModal: React.FC<PROPS> = ({
         <ModalHeader>診断する画像をトリミング</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <ReactCrop crop={crop} onChange={(c) => setCrop(c)}>
+          <ReactCrop
+            ruleOfThirds
+            crop={crop}
+            onChange={(c) => setCrop(c)}
+            aspect={16 / 9}
+          >
             <img src={src} alt="cropperImg" onLoad={onImageLoad} />
           </ReactCrop>
         </ModalBody>

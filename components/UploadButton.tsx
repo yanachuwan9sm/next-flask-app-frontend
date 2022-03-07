@@ -51,6 +51,7 @@ const UploadButton = () => {
   // ドロップするファイルの形式を指定
   const accept = "image/*";
 
+  // ファイルが選択された場合に実行するコールバック関数
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!acceptedFiles[0]) return;
     try {
@@ -79,18 +80,14 @@ const UploadButton = () => {
     onDropRejected,
   });
 
-  //
   // ファイルをアップロードするコールバック関数
-  //
   const handleUpload = (acceptedImg: any) => {
     try {
       //アップロード時の処理を行う
     } catch (err: any) {}
   };
 
-  //
   // 選択した画像のプレビューを表示するコールバック関数
-  //
   const handlePreview = (files: File[]) => {
     if (files === null) {
       return;
@@ -143,16 +140,15 @@ const UploadButton = () => {
         />
 
         <Button
-          disabled={!isDragActive}
+          disabled={isDragActive}
           type="submit"
           onClick={() => handleUpload(myFiles)}
           px={4}
           py={2}
           my={4}
-          bgColor="gray.200"
           rounded="md"
         >
-          UPLOAD
+          Check Start
         </Button>
       </Box>
     </>
