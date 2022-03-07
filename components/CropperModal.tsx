@@ -1,4 +1,5 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { Dispatch, useRef } from "react";
+
 import {
   Modal,
   ModalOverlay,
@@ -8,51 +9,49 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  AspectRatio,
-  Box,
 } from "@chakra-ui/react";
 
+import { useImageCrop } from "./hooks/useImageCrop";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { addScaleCorrection } from "framer-motion";
 
-export type PROPS = {
+type PROPS = {
   open: boolean;
   setOpen: (open: boolean) => void;
   myFiles: File[];
   setMyFiles: (myFiles: File[]) => void;
-  previewImg: string;
-  aspectVertical: number;
-  aspectHorizontal: number;
+  src: string;
+  imageInput: any;
+  setImageInput: Dispatch<any>;
+  setResult: Dispatch<React.SetStateAction<undefined>>;
 };
 
-export const CropModal: React.VFC<PROPS> = ({
+const CropperModal: React.FC<PROPS> = ({
   open,
   setOpen,
-  previewImg,
+  src,
   setMyFiles,
+  imageInput,
+  setImageInput,
+  setResult,
 }) => {
-  const [crop, setCrop] = useState<Crop>({
-    unit: "%",
-    x: 0,
-    y: 0,
-    width: 400,
-    height: 250,
-  });
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
-  const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
-  const imageRef = useRef<HTMLImageElement | null>(null);
-  const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [crop, setCrop, setImage] = useImageCrop(
+    imgRef.current,
+    setImageInput,
+    setResult
+  );
 
-  const onLoad = useCallback((img: HTMLImageElement) => {
-    imageRef.current = img;
-  }, []);
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    imgRef.current = e.currentTarget;
+  };
 
   // モーダルを閉じる際に実行するコールバック関数
-  const closeHandle = useCallback(() => {
+  const closeHandle = () => {
     setOpen(!open);
     setMyFiles([]);
-  }, []);
+  };
 
   return (
     <Modal isOpen={open} onClose={closeHandle}>
@@ -61,44 +60,21 @@ export const CropModal: React.VFC<PROPS> = ({
         <ModalHeader>診断する画像をトリミング</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box flexShrink="1">
-            {previewImg && (
-              <ReactCrop
-                src={previewImg}
-                crop={crop}
-                ruleOfThirds
-                onComplete={(c: Crop) => {
-                  setCompletedCrop(c);
-                }}
-                onChange={(c: Crop) => {
-                  setCrop(c);
-                }}
-                onImageLoaded={onLoad}
-                imageStyle={{
-                  maxWidth: "200px",
-                  minWidth: "200px",
-                }}
-              />
-            )}
-          </Box>
-          <Box>
-            <canvas
-              ref={previewCanvasRef}
-              style={{
-                width: Math.round(completedCrop?.width ?? 0),
-                height: Math.round(completedCrop?.height ?? 0),
-                display: "none",
-              }}
-            />
-          </Box>
+          <ReactCrop crop={crop} onChange={(c) => setCrop(c)}>
+            <img src={src} alt="cropperImg" onLoad={onImageLoad} />
+          </ReactCrop>
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={closeHandle}>
             閉じる
           </Button>
-          <Button variant="ghost">トリミングする</Button>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            トリミングする
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
+
+export default CropperModal;

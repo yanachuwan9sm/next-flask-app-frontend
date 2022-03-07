@@ -1,4 +1,4 @@
-import { Box, Container, Heading } from "@chakra-ui/react";
+import { Box, Code, Container, Heading, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -15,21 +15,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container
-        mx="auto"
-        minWidth="500px"
-        maxWidth="700px"
-        bgRepeat="no-repeat"
-      >
-        <Image src="/backimage.png" layout="fill" objectFit="cover" />
-
-        <Heading as="h1" size="2xl" isTruncated>
-          🔥Remote Worker Checker🔥
+      <Container mx="auto" width="100%" bgRepeat="no-repeat">
+        <Heading py={5} as="h1" size="xl" isTruncated textAlign="center">
+          Remote Worker Checker
         </Heading>
-
         <Container py={2}>
           <Box
-            minHeight="100vh"
             px={1}
             display="flex"
             flex={1}
@@ -37,32 +28,15 @@ const Home: NextPage = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <p className={styles.description}>
-              あなたのリモートオフィスからリモートワーカー度を計測します
-            </p>
+            <Text fontSize="md">
+              あなたのリモートオフィスからリモートワーカー度を計測
+            </Text>
+
+            <Code>
+              const Remote Worker Level = objectRecognition(image_path);
+            </Code>
 
             <UploadButton />
-
-            <code className={styles.code}>
-              const Remote Worker Level = objectRecognition(remoteOffice);
-            </code>
-
-            <div className={styles.grid}>
-              <a href="https://nextjs.org/docs" className={styles.card}>
-                <h2>Documentation &rarr;</h2>
-                <p>Find in-depth information about Next.js features and API.</p>
-              </a>
-              <a
-                href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                className={styles.card}
-              >
-                <h2>Deploy &rarr;</h2>
-                <p>
-                  Instantly deploy your Next.js site to a public URL with
-                  Vercel.
-                </p>
-              </a>
-            </div>
           </Box>
 
           <footer className={styles.footer}>
