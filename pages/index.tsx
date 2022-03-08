@@ -15,9 +15,33 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Box
+        pos="fixed"
+        h="100vh"
+        w="100vw"
+        opacity={0.35}
+        overflow="hidden"
+        zIndex={-1}
+      >
+        <Image
+          alt="Mountains"
+          src="/../public/images/backimage.png"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
+      </Box>
+
       <Container mx="auto" width="100%" bgRepeat="no-repeat">
-        <Heading py={5} as="h1" size="xl" isTruncated textAlign="center">
-          Remote Worker Checker
+        <Heading
+          py={5}
+          as="h1"
+          size="xl"
+          isTruncated
+          textAlign="center"
+          pt="10vh"
+        >
+          Remote Work Checker
         </Heading>
         <Container py={2}>
           <Box
@@ -28,12 +52,12 @@ const Home: NextPage = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize="md">
+            <Text fontSize="md" pt={3} pb={5}>
               あなたのリモートオフィスからリモートワーカー度を計測
             </Text>
 
             <Code>
-              const Remote Worker Level = objectRecognition(image_path);
+              const Remote Worker Level = objectRecognition(remoteOffice_path);
             </Code>
 
             <UploadButton />

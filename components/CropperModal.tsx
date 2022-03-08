@@ -21,8 +21,6 @@ type PROPS = {
   myFiles: File[];
   setMyFiles: (myFiles: File[]) => void;
   src: string;
-  imageInput: any;
-  setImageInput: Dispatch<any>;
   setResult: Dispatch<React.SetStateAction<undefined>>;
 };
 
@@ -31,21 +29,33 @@ const CropperModal: React.FC<PROPS> = ({
   setOpen,
   src,
   setMyFiles,
-  imageInput,
-  setImageInput,
   setResult,
 }) => {
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  const [crop, setCrop, previewImg] = useImageCrop(
-    imgRef,
-    setImageInput,
-    setResult
-  );
+  const [crop, setCrop, setCompletedCrop] = useImageCrop(imgRef, setResult);
 
   const onImageLoad = useCallback(
     (e: React.SyntheticEvent<HTMLImageElement>) => {
       imgRef.current = e.currentTarget;
+
+      const { width, height } = e.currentTarget;
+
+      const crop = centerCrop(
+        makeAspectCrop(
+          {
+            unit: "%",
+            width: 90,
+          },
+          16 / 9,
+          width,
+          height
+        ),
+        width,
+        height
+      );
+
+      setCrop(crop);
     },
     []
   );
@@ -67,6 +77,7 @@ const CropperModal: React.FC<PROPS> = ({
             ruleOfThirds
             crop={crop}
             onChange={(c) => setCrop(c)}
+            onComplete={(c) => setCompletedCrop(c)}
             aspect={16 / 9}
           >
             <img src={src} alt="cropperImg" onLoad={onImageLoad} />

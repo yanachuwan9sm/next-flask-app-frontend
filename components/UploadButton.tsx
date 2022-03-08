@@ -1,5 +1,5 @@
-import { Box, Button, Icon, Input } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Box, Button } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
@@ -23,7 +23,8 @@ const UploadContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+
+  padding: 60px 30px 60px 30px;
   border-width: 2px;
   border-radius: 2px;
   border-color: ${(props) => getColor(props)};
@@ -39,7 +40,6 @@ const UploadButton = () => {
   const [myFiles, setMyFiles] = useState<File[]>([]);
   const [src, setSrc] = useState<string>("");
   const [result, setResult] = useState();
-  const [imageInput, setImageInput] = useState<any>();
 
   useEffect(() => {
     if (myFiles === null) {
@@ -112,19 +112,13 @@ const UploadButton = () => {
         >
           {/* この中の要素で ドラック&ドロップおよびタップすると画像選択 */}
           <input {...getInputProps()} />
-          {myFiles.length === 0 ? (
+          {result === undefined ? (
             <>
               <PlusSquareIcon />
               <p>画像を選択またはドラッグ＆ドロップしてください</p>
             </>
           ) : (
-            <>
-              {myFiles.map((file: File) => (
-                <React.Fragment key={file.name}>
-                  {result && !open && <img src={result} />}
-                </React.Fragment>
-              ))}
-            </>
+            <>{result && !open && <img src={result} />}</>
           )}
         </UploadContainer>
 
@@ -134,8 +128,6 @@ const UploadButton = () => {
           myFiles={myFiles}
           setMyFiles={setMyFiles}
           src={src}
-          imageInput={imageInput}
-          setImageInput={setImageInput}
           setResult={setResult}
         />
 
