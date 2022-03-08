@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import CropperModal from "./CropperModal";
+import { test } from "../pages/api/result";
 
 const getColor = (props: any) => {
   if (props.isDragAccept) {
@@ -81,9 +82,11 @@ const UploadButton = () => {
   });
 
   // ファイルをアップロードするコールバック関数
-  const handleUpload = (acceptedImg: any) => {
+  const handleUpload = async (acceptedImg: any) => {
     try {
       //アップロード時の処理を行う
+      const response = await test();
+      console.log(response);
     } catch (err: any) {}
   };
 
