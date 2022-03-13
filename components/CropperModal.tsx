@@ -21,7 +21,7 @@ type PROPS = {
   myFiles: File[];
   setMyFiles: (myFiles: File[]) => void;
   src: string;
-  setResult: Dispatch<React.SetStateAction<undefined>>;
+  setResult: Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const CropperModal: React.FC<PROPS> = ({

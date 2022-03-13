@@ -4,7 +4,9 @@ import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import CropperModal from "./CropperModal";
-import { test } from "../pages/api/result";
+import { detection } from "../pages/api/result";
+import S3UploadHandler from "../pages/api/upload";
+import axios from "axios";
 
 const getColor = (props: any) => {
   if (props.isDragAccept) {
@@ -40,7 +42,7 @@ const UploadButton = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [myFiles, setMyFiles] = useState<File[]>([]);
   const [src, setSrc] = useState<string>("");
-  const [result, setResult] = useState();
+  const [result, setResult] = useState<string | undefined>();
 
   useEffect(() => {
     if (myFiles === null) {
@@ -81,13 +83,31 @@ const UploadButton = () => {
     onDropRejected,
   });
 
-  // ファイルをアップロードするコールバック関数
-  const handleUpload = async (acceptedImg: any) => {
+  // トリミングされた画像を元に物体検出を行う
+  const handleUpload = async (acceptedImg: string | undefined) => {
+    if (!acceptedImg) {
+      return;
+    }
+
+    //Base64Image を Blob に変換
+    const base64Response = await fetch(acceptedImg);
+    const blob = await base64Response.blob();
+
+    // ファイルの拡張子(png/jpeg ...etc)
+    const fileExtension = acceptedImg
+      .toString()
+      .slice(acceptedImg.indexOf("/") + 1, acceptedImg.indexOf(";"));
+
+    const fd = new FormData();
+    const file = new File([blob], `detection_image.${fileExtension}`);
+    fd.append("image", file);
+
     try {
-      //アップロード時の処理を行う
-      const response = await test();
-      console.log(response);
-    } catch (err: any) {}
+      const res = await detection(fd);
+      console.log(res);
+    } catch (err: any) {
+      console.log(err);
+    }
   };
 
   // 選択した画像のプレビューを表示するコールバック関数
@@ -137,7 +157,7 @@ const UploadButton = () => {
         <Button
           disabled={isDragActive}
           type="submit"
-          onClick={() => handleUpload(myFiles)}
+          onClick={() => handleUpload(result)}
           px={4}
           py={2}
           my={4}
