@@ -8,8 +8,18 @@ export const apiClient = axios.create({
   },
 });
 
-export const detection = async (param: FormData) => {
-  const response = await apiClient.get(`/api/detection/${param}`);
+export const test = async (param: FormData) => {
+  const res = await apiClient.post(`/hello`, {
+    params: param,
+  });
 
-  return response;
+  return res;
+};
+
+export const detection = async (param: FormData) => {
+  const res = await apiClient.post(`/detection`, {
+    params: param,
+  });
+
+  return res;
 };

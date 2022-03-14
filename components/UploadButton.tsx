@@ -4,8 +4,8 @@ import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import CropperModal from "./CropperModal";
-import { detection } from "../pages/api/result";
-import S3UploadHandler from "../pages/api/upload";
+import { detection, test } from "../src/api/result";
+import S3UploadHandler from "../src/api/upload";
 import axios from "axios";
 
 const getColor = (props: any) => {
@@ -102,9 +102,13 @@ const UploadButton = () => {
     const file = new File([blob], `detection_image.${fileExtension}`);
     fd.append("image", file);
 
+    console.log(fd.get("image"));
+
     try {
       const res = await detection(fd);
+      //const res2 = await test(fd);
       console.log(res);
+      //console.log(res2);
     } catch (err: any) {
       console.log(err);
     }
