@@ -1,5 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Dispatch, useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
@@ -38,7 +38,12 @@ const UploadContainer = styled.div`
   transition: border 0.24s ease-in-out;
 `;
 
-const UploadButton = () => {
+type PROPS = {
+  IsDetected: Boolean;
+  setIsDetected: Dispatch<React.SetStateAction<Boolean>>;
+};
+
+const UploadButton: React.VFC<PROPS> = ({ IsDetected, setIsDetected }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [myFiles, setMyFiles] = useState<File[]>([]);
   const [src, setSrc] = useState<string>("");
@@ -104,11 +109,11 @@ const UploadButton = () => {
 
     console.log(fd.get("image"));
 
+    setIsDetected(true);
+
     try {
-      const res = await detection(fd);
-      //const res2 = await test(fd);
-      console.log(res);
-      //console.log(res2);
+      // const res = await detection(fd);
+      // console.log(res);
     } catch (err: any) {
       console.log(err);
     }

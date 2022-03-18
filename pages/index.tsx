@@ -1,12 +1,17 @@
-import { Box, Code, Container, Heading, Text } from "@chakra-ui/react";
-import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import type { NextPage } from "next";
+import React from "react";
+
+import { Box, Code, Container, Heading, Text } from "@chakra-ui/react";
+
 import styles from "../styles/Home.module.css";
-import backImg from "../public/images/backimage.png";
 import UploadButton from "../components/UploadButton";
+import ResultChart from "../components/ResultChart";
 
 const Home: NextPage = () => {
+  const [IsDetected, setIsDetected] = React.useState<Boolean>(false);
+
   return (
     <>
       <Head>
@@ -25,7 +30,7 @@ const Home: NextPage = () => {
       >
         <Image
           alt="Mountains"
-          src="/../public/images/backimage.png"
+          src="/backimage.png"
           layout="fill"
           objectFit="cover"
           quality={100}
@@ -60,7 +65,18 @@ const Home: NextPage = () => {
               const Remote Worker Level = objectRecognition(remoteOffice_path);
             </Code>
 
-            <UploadButton />
+            <UploadButton
+              IsDetected={IsDetected}
+              setIsDetected={setIsDetected}
+            />
+
+            {IsDetected ? (
+              <>
+                <ResultChart />
+              </>
+            ) : (
+              <></>
+            )}
           </Box>
 
           <footer className={styles.footer}>

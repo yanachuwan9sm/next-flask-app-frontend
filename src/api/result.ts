@@ -9,7 +9,7 @@ export const apiClient = axios.create({
 });
 
 export const test = async (param: FormData) => {
-  const res = await apiClient.post(`/hello`, {
+  const res = await apiClient.post(`/`, {
     params: param,
   });
 
@@ -17,7 +17,7 @@ export const test = async (param: FormData) => {
 };
 
 export const detection = async (param: FormData) => {
-  const res = await apiClient.post(`/detection`, {
+  const res = await apiClient.get(`/detection`, {
     params: param,
   });
 

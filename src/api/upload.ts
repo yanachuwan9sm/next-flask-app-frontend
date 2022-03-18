@@ -3,6 +3,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { S3, config } from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
 
+//
+// Twitterシェアを行う場合のみ OGP画像生成に伴い
+// アップロードされた画像をS3に保存する
+//
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
