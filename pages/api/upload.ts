@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 // Twitterシェアを行う場合のみ OGP画像生成に伴い
 // アップロードされた画像をS3に保存する
 //
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,7 +19,7 @@ export default async function handler(
     signatureVersion: "v4",
   });
 
-  const encodeData = req.query.string as string;
+  const encodeData = req.body.params;
 
   // Base64Image をデコードする
   const fileData = encodeData.replace(/^data:\w+\/\w+;base64,/, "");

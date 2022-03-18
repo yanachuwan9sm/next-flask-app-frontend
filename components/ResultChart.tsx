@@ -15,6 +15,8 @@ import html2canvas from "html2canvas";
 
 import { Radardata, Radaroptions } from "../components/CreateChart";
 import { CSSParsedPseudoDeclaration } from "html2canvas/dist/types/css";
+import uploadS3Handler from "../src/api/upload";
+import axios from "axios";
 
 const ResultContainer = styled.div`
   padding: 60px 30px 60px 30px;
@@ -35,7 +37,18 @@ const ResultChart: React.VFC = () => {
     const canvas = await html2canvas(element);
     // Base64形式の画像データを取得
     const data = canvas.toDataURL("image/jpg");
+    //
+    // S3にアップロード
+    // 検証結果を全て画像として保存することで
+    // 画像に付随する数値を保持するデータベースを使う手間を省く
+    // ファイル名となる uuid だけ分かればOK
+    //
     console.log(data);
+    const result = await axios.post("/api/upload/", {
+      params: data,
+    });
+
+    console.log(result);
   };
 
   ChartJS.register(
