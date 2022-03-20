@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 // Twitterシェアを行う場合のみ OGP画像生成に伴い
 // アップロードされた画像をS3に保存する
 //
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -26,7 +25,7 @@ export default async function handler(
   const decodedFile = Buffer.from(fileData, "base64");
 
   //ファイル名を uuid で生成
-  const fileName = uuidv4();
+  // const fileName = uuidv4();
 
   // ファイルの拡張子(png/jpeg ...etc)
   const fileExtension = encodeData
@@ -41,7 +40,7 @@ export default async function handler(
   const params: S3.PutObjectRequest = {
     Body: decodedFile,
     Bucket: process.env.S3_UPLOAD_BUCKET_NAME as string,
-    Key: [fileName, fileExtension].join("."),
+    Key: [req.body.uuid, fileExtension].join("."),
     ContentType: contentType,
   };
 

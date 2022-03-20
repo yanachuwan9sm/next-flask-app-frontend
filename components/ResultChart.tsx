@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
+import axios from "axios";
 import styled from "@emotion/styled";
 import { Box, Button, Text } from "@chakra-ui/react";
 import {
@@ -12,11 +13,10 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import html2canvas from "html2canvas";
+import { v4 as uuidv4 } from "uuid";
 
 import { Radardata, Radaroptions } from "../components/CreateChart";
-import { CSSParsedPseudoDeclaration } from "html2canvas/dist/types/css";
-import uploadS3Handler from "../src/api/upload";
-import axios from "axios";
+import Router from "next/router";
 
 const ResultContainer = styled.div`
   padding: 60px 30px 60px 30px;
@@ -28,6 +28,7 @@ const ResultContainer = styled.div`
 
 const ResultChart: React.VFC = () => {
   const imgRef = useRef(null);
+  const [uploadImg, setUploadImg] = useState<string>();
 
   const handleResultImage = async () => {
     const element = imgRef?.current;
@@ -37,18 +38,37 @@ const ResultChart: React.VFC = () => {
     const canvas = await html2canvas(element);
     // Base64形式の画像データを取得
     const data = canvas.toDataURL("image/jpg");
-    //
+
     // S3にアップロード
     // 検証結果を全て画像として保存することで
     // 画像に付随する数値を保持するデータベースを使う手間を省く
-    // ファイル名となる uuid だけ分かればOK
-    //
-    console.log(data);
-    const result = await axios.post("/api/upload/", {
+
+    //ファイル名を uuid で生成
+    const fileName = uuidv4();
+
+    const res = await axios.post("/api/upload/", {
       params: data,
+      uuid: fileName,
     });
 
-    console.log(result);
+    if (res.status === 200) {
+      Router.push("/result/[id]", `/result/${fileName}`);
+
+      // const res = await axios.post(
+      //   "/api/download/",
+      //   {
+      //     params: fileName,
+      //   },
+      //   { responseType: "blob" }
+      // );
+
+      // let reader = new FileReader();
+      // // blob を base64 に変換
+      // reader.readAsDataURL(res.data);
+      // reader.onload = () => {
+      //   setUploadImg(reader.result as string);
+      // };
+    }
   };
 
   ChartJS.register(
@@ -86,6 +106,8 @@ const ResultChart: React.VFC = () => {
         </Box>
 
         <Button onClick={handleResultImage}>Twitterで結果をシェア</Button>
+
+        <img src={uploadImg} />
       </Box>
     </>
   );

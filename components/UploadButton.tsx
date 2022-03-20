@@ -1,12 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
 import React, { Dispatch, useCallback, useEffect, useState } from "react";
+
+import { Box, Button } from "@chakra-ui/react";
 import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import { PlusSquareIcon } from "@chakra-ui/icons";
+
 import CropperModal from "./CropperModal";
-import { detection, test } from "../src/api/result";
-import S3UploadHandler from "../src/api/upload";
-import axios from "axios";
 
 const getColor = (props: any) => {
   if (props.isDragAccept) {
@@ -112,8 +111,7 @@ const UploadButton: React.VFC<PROPS> = ({ IsDetected, setIsDetected }) => {
     setIsDetected(true);
 
     try {
-      // const res = await detection(fd);
-      // console.log(res);
+      // サーバー(flask側)にレスポンスを投げる
     } catch (err: any) {
       console.log(err);
     }
