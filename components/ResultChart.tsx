@@ -1,4 +1,6 @@
 import React, { useRef, useState } from "react";
+import Router from "next/router";
+import { useRouter } from "next/router";
 
 import axios from "axios";
 import styled from "@emotion/styled";
@@ -16,7 +18,6 @@ import html2canvas from "html2canvas";
 import { v4 as uuidv4 } from "uuid";
 
 import { Radardata, Radaroptions } from "../components/CreateChart";
-import Router from "next/router";
 
 const ResultContainer = styled.div`
   padding: 60px 30px 60px 30px;
@@ -27,6 +28,7 @@ const ResultContainer = styled.div`
 `;
 
 const ResultChart: React.VFC = () => {
+  const router = useRouter();
   const imgRef = useRef(null);
   const [uploadImg, setUploadImg] = useState<string>();
 
@@ -52,7 +54,7 @@ const ResultChart: React.VFC = () => {
     });
 
     if (res.status === 200) {
-      Router.push("/result/[id]", `/result/${fileName}`);
+      router.push(`/result/${fileName}`);
 
       // const res = await axios.post(
       //   "/api/download/",

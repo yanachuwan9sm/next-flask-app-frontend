@@ -4,29 +4,37 @@ import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import getConfig from "next/config";
+import { useState } from "react";
 
 const { publicRuntimeConfig } = getConfig();
 const { API_URL } = publicRuntimeConfig;
 
 export const fetcher = (url: string) => axios(url).then((res) => res.data);
 
-export const getServerSideProps = async (query: string) => {
+export const getServerSideProps = async (ctx: any) => {
+  const uuid = ctx.params?.id as string;
+  // サーバーがドメインを認識しないため、完全修飾URLを入力する
   const res = await axios.post(
-    "/api/download/",
+    `http://localhost:3000/api/download/`,
     {
-      params: query,
+      params: uuid,
     },
     { responseType: "blob" }
   );
-  return { props: { res } };
+
+  const blob = res.data;
+
+  return { props: { blob } };
 };
-
 export default function Photo(props: any) {
-  const initialData = props.data;
+  const [loadingImg, setLoadingImg] = useState<string>();
 
-  // const { data } = useSWR(`${API_URL}/todos`, fetcher, {
-  //   initialData,
-  // });
+  let reader = new FileReader();
+  // blob を base64 に変換
+  reader.readAsDataURL(props);
+  reader.onload = () => {
+    setUploadImg(reader.result as string);
+  };
 
   console.log(props);
 
